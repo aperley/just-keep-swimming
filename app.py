@@ -24,6 +24,9 @@ def main():
 
     logger.info("Application initialized")
 
+    motor_driver.set_enabled(True)
+    logger.info("Application running")
+
     while True:
         fish_position = fish_sensor.poll()
         motor_cmd = controller.process(fish_position)

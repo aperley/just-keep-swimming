@@ -7,10 +7,10 @@ import atexit
 class MotorDriver(object):
     def __init__(self):
         self.mh = Adafruit_MotorHAT(addr=0x60)
-        self.fl = mh.getMotor(1)
-        self.fr = mh.getMotor(2)
-        self.bl = mh.getMotor(3)
-        self.br = mh.getMotor(4)
+        self.fl = self.mh.getMotor(1)
+        self.fr = self.mh.getMotor(3)
+        self.bl = self.mh.getMotor(2)
+        self.br = self.mh.getMotor(4)
 
         # Start with the module disabled
         self.set_enabled(False)
@@ -20,10 +20,11 @@ class MotorDriver(object):
 
     def command(self, motor_cmd):
         if self._enabled:
-            self._command_motor(self.fl, motor_cmd.fl)
-            self._command_motor(self.fr, motor_cmd.fr)
-            self._command_motor(self.bl, motor_cmd.bl)
-            self._command_motor(self.br, motor_cmd.br)
+            # Negative signs to correct for backwards turning
+            self._command_motor(self.fl, -motor_cmd.fl)
+            self._command_motor(self.fr, +motor_cmd.fr)
+            self._command_motor(self.bl, +motor_cmd.bl)
+            self._command_motor(self.br, -motor_cmd.br)
 
     def set_enabled(self, enabled):
         self._enabled = enabled
@@ -36,6 +37,7 @@ class MotorDriver(object):
 
     def _command_motor(self, motor, velocity):
         assert -1.0 <= velocity <= 1.0
+
         pwm_val = int(abs(velocity) * 255)
         if velocity >= 0:
             direction = Adafruit_MotorHAT.FORWARD

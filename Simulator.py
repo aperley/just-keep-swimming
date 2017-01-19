@@ -49,6 +49,10 @@ class FishSensorSimulator(object):
                     self.pos_x -= 1
                 if event.key == K_RIGHT and self.pos_x != self.tank_width/2:
                     self.pos_x += 1
+                if event.key == K_UP and self.pos_y != -self.tank_height/2:
+                    self.pos_y -= 1
+                if event.key == K_DOWN and self.pos_y != self.tank_height/2:
+                    self.pos_y += 1
 
         self.sim.redraw()
         return DataTypes.FishPosition(x=self.pos_x / (self.tank_width/2),
@@ -76,7 +80,11 @@ class MotorDriverSimulator(object):
         self.cx, self.cy = sim.width/2, sim.height/2
 
     def command(self, motor_cmd):
-        self.pos_x += motor_cmd.fl
+        self.pos_x += (motor_cmd.fl + motor_cmd.fr) / 2
+        if motor_cmd.fl > 0:
+            self.pos_y += motor_cmd.fl - motor_cmd.fr
+        else:
+            self.pos_y += motor_cmd.fr - motor_cmd.fl
         self.sim.redraw()
 
     def redraw(self, surf):

@@ -79,6 +79,8 @@ class MotorDriverSimulator(object):
         self.display_scale = 1
         self.cx, self.cy = sim.width/2, sim.height/2
 
+        self.set_enabled(False)
+
     def command(self, motor_cmd):
         self.pos_x += (motor_cmd.fl + motor_cmd.fr) / 2
         if motor_cmd.fl > 0:
@@ -86,6 +88,12 @@ class MotorDriverSimulator(object):
         else:
             self.pos_y += motor_cmd.fr - motor_cmd.fl
         self.sim.redraw()
+
+    def set_enabled(self, enabled):
+        self._enabled = enabled
+
+    def is_enabled(self):
+        return self._enabled
 
     def redraw(self, surf):
         rect = pygame.Rect(int(self.pos_x * self.display_scale + self.cx),

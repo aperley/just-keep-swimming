@@ -53,5 +53,9 @@ class DriveController(object):
             elif fish_pos.y > self.ZONE_START and fish_pos.y <= 1:
 		logger.debug("Zone: 'Forward Right'")
                 command=FRONT_RIGHT
-        return command
+        new_command = self.scale_command(command, abs(fish_pos.x))
+        return new_command
+
+    def scale_command(self, comm, scale):
+        return MC(r=comm.fr * scale, l=comm.fl * scale)
 	

@@ -77,6 +77,8 @@ if __name__ == "__main__":
 		row = int(round(idx_rows.mean()))
 		col = int(round(idx_cols.mean()))
 		marked_frame = cv2.circle(frame, (col, row), 5, (0, 0, 255), -1)
+		print "%.3f, %.3f" % (float(col) / (280.0/2) - 1,
+				      float(row) / (192.0/2) - 1)
 		#cv2.imshow("image", marked_frame)
 	else:
 		pass

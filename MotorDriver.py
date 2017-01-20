@@ -21,10 +21,10 @@ class MotorDriver(object):
     def command(self, motor_cmd):
         if self._enabled:
             # Negative signs to correct for backwards turning
-            self._command_motor(self.fl, -motor_cmd.fl)
-            self._command_motor(self.fr, +motor_cmd.fr)
-            self._command_motor(self.bl, +motor_cmd.bl)
-            self._command_motor(self.br, -motor_cmd.br)
+            self._command_motor(self.fl, +motor_cmd.fl)
+            self._command_motor(self.fr, -motor_cmd.fr)
+            self._command_motor(self.bl, -motor_cmd.bl)
+            self._command_motor(self.br, +motor_cmd.br)
 
     def set_enabled(self, enabled):
         self._enabled = enabled
@@ -37,8 +37,6 @@ class MotorDriver(object):
 
     def _command_motor(self, motor, velocity):
         assert -1.0 <= velocity <= 1.0
-	# TODO TESTING REMOVE ME
-	velocity = velocity / 4.0
 
         pwm_val = int(abs(velocity) * 255)
         if velocity >= 0:

@@ -8,14 +8,17 @@ class FishSensor(object):
 	    self.cap.set(3, 280)
 	    self.cap.set(4, 192)
 
-	    cv2.namedWindow("image")
+	    #cv2.namedWindow("image")
 
-	    lower_b, lower_g, lower_r = 0, 0, 80
-	    upper_b, upper_g, upper_r = 130, 75, 115
+	    #lower_b, lower_g, lower_r = 0, 0, 80
+            lower_b, lower_g, lower_r = 0, 55, 130
+	    #upper_b, upper_g, upper_r = 130, 75, 115
+	    upper_b, upper_g, upper_r = 100, 145, 195
 	    self.lower = np.array([lower_b, lower_g, lower_r], dtype='uint8')
 	    self.upper = np.array([upper_b, upper_g, upper_r], dtype='uint8')
 
 	    self.old_x, self.old_y = 0.0, 0.0
+            self.old_count = 0
 
     def poll(self):
         ret, frame = self.cap.read()
@@ -31,12 +34,18 @@ class FishSensor(object):
                 y = float(row)/(192/2)-1.0
 		self.old_x = x
 		self.old_y = y
+                self.old_count = 0
 	else:
-		x = self.old_x
-		y = self.old_y
+		if self.old_count > 5:
+			x = 0.0
+			y = 0.0
+		else:
+			x = self.old_x
+			y = self.old_y
+                self.old_count += 1
 		
-	cv2.imshow("image", frame)
-	key = cv2.waitKey(1)
+	#cv2.imshow("image", frame)
+	#key = cv2.waitKey(1)
 	return FishPosition(x=x, y=y)
 
 if __name__ == "__main__":
@@ -51,8 +60,10 @@ if __name__ == "__main__":
     cv2.namedWindow("image")
     cv2.setMouseCallback("image", onClick)
 
-    lower_b, lower_g, lower_r = 0, 0, 80
-    upper_b, upper_g, upper_r = 130, 75, 115
+    #lower_b, lower_g, lower_r = 0, 0, 80
+    lower_b, lower_g, lower_r = 0, 55, 130
+    #upper_b, upper_g, upper_r = 130, 75, 115
+    upper_b, upper_g, upper_r = 100, 145, 195
     mode = 0
 
     while True:

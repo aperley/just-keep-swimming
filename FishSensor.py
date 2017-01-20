@@ -4,10 +4,30 @@ from DataTypes import FishPosition
 
 class FishSensor(object):
     def __init__(self):
-        pass
+	    self.cap = cv2.VideoCapture(0)
+	    self.cap.set(3, 280)
+	    self.cap.set(4, 192)
+
+	    cv2.namedWindow("image")
+
+	    lower_b, lower_g, lower_r = 0, 0, 80
+	    upper_b, upper_g, upper_r = 130, 75, 115
+	    self.lower = np.array([lower_b, lower_g, lower_r], dtype='uint8')
+	    self.upper = np.array([upper_b, upper_g, upper_r], dtype='uint8')
 
     def poll(self):
-        return FishPosition(x=0, y=0)
+        ret, frame = self.cap.read()
+        mask = cv2.inRange(frame, self.lower, self.upper)
+
+	idx_rows, idx_cols = np.where(mask)
+	if len(idx_rows > 0):
+		row = int(round(idx_rows.mean()))
+		col = int(round(idx_cols.mean()))
+		marked_frame = cv2.circle(frame, (col, row), 5, (0, 0, 255), -1)
+
+	cv2.imshow("image", frame)
+	key = cv2.waitKey(1)
+	return FishPosition(x=float(col)/(280/2)-1.0, y=float(row)/(192/2)-1.0)
 
 if __name__ == "__main__":
     cap = cv2.VideoCapture(0)

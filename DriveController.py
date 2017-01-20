@@ -10,4 +10,5 @@ class DriveController(object):
     def process(self, fish_pos):
         logger.debug("Process %s" % str(fish_pos))
         val = fish_pos.x
-        return MotorCommand(fr=val, fl=val, br=val, bl=val) 
+        #return MotorCommand(fr=val, fl=val, br=val, bl=val) 
+	return MotorCommand(fr=0, fl=0, br=0, bl=0)

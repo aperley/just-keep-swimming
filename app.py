@@ -5,7 +5,7 @@ import logging
 import sys
 
 import DriveController
-import Simulator
+import FishSensor
 
 LOG_LEVEL = logging.DEBUG
 logger = logging.getLogger(__name__)
@@ -17,20 +17,19 @@ def main():
 
     init_logging(args)
 
-    sim = Simulator.Simulator()
-    fish_sensor = sim.sensor
+    fish_sensor = FishSensor.FishSensor()
     controller = DriveController.DriveController()
-    motor_driver = sim.driver
+    #motor_driver = sim.driver
 
     logger.info("Application initialized")
 
-    motor_driver.set_enabled(True)
+    #motor_driver.set_enabled(True)
     logger.info("Application running")
 
     while True:
         fish_position = fish_sensor.poll()
         motor_cmd = controller.process(fish_position)
-        motor_driver.command(motor_cmd)
+        #motor_driver.command(motor_cmd)
 
 def init_logging(args):
     if args.log:
